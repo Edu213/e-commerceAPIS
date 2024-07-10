@@ -1,0 +1,199 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API for managing products in MongoDB",
+    "version": "1.0.0",
+    "title": "Product API"
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Get all products",
+        "description": "Fetches all products from the database",
+        "responses": {
+          "200": {
+            "description": "A list of products",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "500": {
+            "description": "Error fetching all products"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new product",
+        "description": "Adds a new product to the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Product object that needs to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product created successfully"
+          },
+          "500": {
+            "description": "Error creating new product"
+          }
+        }
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "summary": "Get product by ID",
+        "description": "Fetches a product from the database by its ID",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product found",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "404": {
+            "description": "Product with the given ID not found"
+          },
+          "500": {
+            "description": "Error fetching the product"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing product",
+        "description": "Updates an existing product in the database",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Product object that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product updated successfully"
+          },
+          "404": {
+            "description": "Product with the given ID not found"
+          },
+          "500": {
+            "description": "Error updating product"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "description": "Deletes a product from the database",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          },
+          "404": {
+            "description": "Product with the given ID not found"
+          },
+          "500": {
+            "description": "Error deleting product"
+          }
+        }
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "summary": "Health check",
+        "description": "Checks the health of the API",
+        "responses": {
+          "200": {
+            "description": "API is healthy"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "required": [
+        "product_id",
+        "name",
+        "price",
+        "quantify",
+        "category",
+        "brand"
+      ],
+      "properties": {
+        "product_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 5
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "minimum": 0.01
+        },
+        "quantify": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "category": {
+          "type": "string",
+          "minLength": 5
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 2
+        }
+      }
+    }
+  }
+}

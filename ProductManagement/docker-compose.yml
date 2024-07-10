@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongo_db_product:
+    image: mongo:4.0
+    container_name: mongo_db_product
+    volumes:
+      - ~/ProductManagementApi:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+
+  product_management_api:
+    build:
+      context: ~/Distribuidos/zonama-webservices/ProductManagement
+      dockerfile: container/Dockerfile
+    image: product_api:latest
+    container_name: ProductManagement_api
+    ports:
+      - "8002:8000"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_HOST: "mongo_db_product"
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+    depends_on:
+      - mongo_db_product
