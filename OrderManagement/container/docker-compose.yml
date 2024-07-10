@@ -1,0 +1,23 @@
+services:
+  mongo_db_order:
+    image: mongo
+    container_name: mongo_db_order
+    volumes:
+      - ~/mongodb_data:/data/db
+    enviroment:
+      MONGO_INITDB_ROOT_USERNAME: $(MONGO_INITDB_ROOT_USERNAME)
+      MONGO_INITDB_ROOT_PASSWORD: $(MONGO_INITDB_ROOT_PASSWORD)
+  orders_api:
+    build:
+      context: ./OrderManagement
+      dockerfile: container/dockerfile
+    image: orders_api:latest
+    container_name: orders_api
+    ports: 
+      - "8005:8000"
+    enviroment:
+      MONGODB_USER: $(MONGO_INITDB_ROOT_USERNAME)
+      MONGODB_HOST: "mongo_db_order"
+      MONGODB_PASS: $(MONGO_INITDB_ROOT_PASSWORD)
+    depends_on:
+      - mongo_db_order

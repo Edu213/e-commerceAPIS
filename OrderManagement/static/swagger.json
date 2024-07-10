@@ -1,0 +1,282 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Orders API",
+      "version": "1.0.0",
+      "description": "API para administrar órdenes."
+    },
+    "basePath": "/",
+    "paths": {
+      "/api/orders": {
+        "get": {
+          "summary": "Obtener todas las órdenes",
+          "responses": {
+            "200": {
+              "description": "Éxito",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Order"
+                }
+              }
+            },
+            "500": {
+              "description": "Error del servidor"
+            }
+          }
+        },
+        "post": {
+          "summary": "Crear una nueva orden",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/OrderInput"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Éxito",
+              "schema": {
+                "$ref": "#/definitions/Message"
+              }
+            },
+            "400": {
+              "description": "Error de validación",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "500": {
+              "description": "Error del servidor",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/api/orders/{order_id}": {
+        "get": {
+          "summary": "Obtener una orden por ID",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "description": "ID de la orden",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Éxito",
+              "schema": {
+                "$ref": "#/definitions/Order"
+              }
+            },
+            "404": {
+              "description": "Orden no encontrada",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "500": {
+              "description": "Error del servidor",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Eliminar una orden por ID",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "description": "ID de la orden",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Éxito",
+              "schema": {
+                "$ref": "#/definitions/Message"
+              }
+            },
+            "404": {
+              "description": "Orden no encontrada",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "500": {
+              "description": "Error del servidor",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Actualizar una orden por ID",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "description": "ID de la orden",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/OrderInput"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Éxito",
+              "schema": {
+                "$ref": "#/definitions/Message"
+              }
+            },
+            "404": {
+              "description": "Orden no encontrada",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            },
+            "500": {
+              "description": "Error del servidor",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/api/orders/{order_id}/tracking": {
+        "get": {
+          "summary": "Obtener información de seguimiento por ID de orden",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "description": "ID de la orden",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Éxito",
+              "schema": {
+                "$ref": "#/definitions/TrackingInfo"
+              }
+            },
+            "404": {
+              "description": "Información de seguimiento no encontrada para esta orden",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Order": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "integer"
+          },
+          "customer_id": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "tracking_info": {
+            "type": "object"
+          }
+        }
+      },
+      "OrderInput": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "tracking_info": {
+            "type": "object"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "TrackingInfo": {
+        "type": "object",
+        "properties": {
+          "tracking_number": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "estimated_delivery": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": ["tracking_number", "status", "estimated_delivery"]
+      }
+      
+    }
+  }
+  
