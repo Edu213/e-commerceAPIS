@@ -1,0 +1,216 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "User Authentication API",
+      "description": "API for user registration and login",
+      "version": "1.0"
+    },
+    "basePath": "/",
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/api/register": {
+        "post": {
+          "summary": "Register User",
+          "description": "Registers a new user in the system.",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Data of the user to register",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserRegistration"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User successfully registered",
+              "schema": {
+                "$ref": "#/definitions/UserIdResponse"
+              }
+            },
+            "400": {
+              "description": "Validation error"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/login": {
+        "post": {
+          "summary": "Login User",
+          "description": "Logs in a user to the system.",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Login credentials",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserCredentials"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Login successful",
+              "schema": {
+                "$ref": "#/definitions/UserIdResponse"
+              }
+            },
+            "401": {
+              "description": "Invalid credentials"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/delete_user": {
+        "delete": {
+          "summary": "Delete User",
+          "description": "Deletes a user from the system.",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User data for deletion",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/DeleteUserRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User successfully deleted",
+              "schema": {
+                "$ref": "#/definitions/DeleteUserResponse"
+              }
+            },
+            "400": {
+              "description": "Validation error"
+            },
+            "401": {
+              "description": "Unauthorized: Incorrect user ID"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/health": {
+        "get": {
+          "summary": "Service Health",
+          "description": "Checks if the service is running.",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Service is running",
+              "schema": {
+                "$ref": "#/definitions/HealthCheckResponse"
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "UserRegistration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          }
+        }
+      },
+      "UserCredentials": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          }
+        }
+      },
+      "DeleteUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "User ID to be deleted"
+          },
+          "confirm": {
+            "type": "string",
+            "description": "Confirmation string (e.g., 'yes')"
+          }
+        }
+      },
+      "UserIdResponse": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "User ID"
+          }
+        }
+      },
+      "HealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Service status"
+          }
+        }
+      }
+    }
+  }
