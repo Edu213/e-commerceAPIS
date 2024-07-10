@@ -1,0 +1,225 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Microservice Payment API",
+    "description": "This API allows the creation, reading, updating and deleting (CRUD) of a user's payment data.",
+    "version": "1.0.0"
+  },
+
+  "paths": {
+    "/api/payments": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "Get payments for a user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "User id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of payments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Payment"
+              }
+            }
+          },
+          "400": {
+            "description": "User id not provided"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["payments"],
+        "summary": "Add a new payment",
+        "parameters": [
+          {
+            "name": "payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment added successfully"
+          },
+          "400": {
+            "description": "Invalid data or bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/payments/{payment_id}": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "Get payment by id",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Payment id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment data",
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            }
+          },
+          "404": {
+            "description": "Payment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["payments"],
+        "summary": "Update payment by id",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Payment id"
+          },
+          {
+            "name": "payment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment updated successfully"
+          },
+          "404": {
+            "description": "Payment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["payments"],
+        "summary": "Delete payment by id",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Payment id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment deleted successfully"
+          },
+          "404": {
+            "description": "Payment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "summary": "Health check endpoint",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Payment": {
+      "type": "object",
+      "required": ["user_id", "cardholder_name", "card_number", "expiry_date", "billing_address"],
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "example": "12345"
+        },
+        "cardholder_name": {
+          "type": "string",
+          "example": "Erick Vazquez"
+        },
+        "card_number": {
+          "type": "string",
+          "example": "5555444433332222"
+        },
+        "expiry_date": {
+          "type": "object",
+          "properties": {
+            "month": {
+              "type": "string",
+              "example": "12"
+            },
+            "year": {
+              "type": "string",
+              "example": "2025"
+            }
+          }
+        },
+        "billing_address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string",
+              "example": "Calle Oyamel"
+            },
+            "city": {
+              "type": "string",
+              "example": "Alvaro Obregon"
+            },
+            "state": {
+              "type": "string",
+              "example": "Ciudad de Mexico"
+            },
+            "postal_code": {
+              "type": "string",
+              "example": "01740"
+            },
+            "country": {
+              "type": "string",
+              "example": "Mexico"
+            }
+          }
+        },
+        "registered_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
